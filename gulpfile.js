@@ -13,8 +13,10 @@ var sources = {
   assets: 'src/**/*.html'
 };
 
+var destination = 'dist';
+
 gulp.task('clean', function(done) {
-  del('dist', done);
+  del(destination, done);
 });
 
 gulp.task('build-scripts', function() {
@@ -23,20 +25,20 @@ gulp.task('build-scripts', function() {
       debug: true,
       transform: ['reactify']
     }))
-    .pipe(gulp.dest('dist/js/'))
+    .pipe(gulp.dest(destination + '/js'))
     .pipe(connect.reload());
 });
 
 gulp.task('build-styles', function() {
   return gulp.src(sources.styles)
     .pipe(less())
-    .pipe(gulp.dest('dist/css/'))
+    .pipe(gulp.dest(destination + '/css'))
     .pipe(connect.reload());
 });
 
 gulp.task('build-assets', function() {
   return gulp.src(sources.assets)
-    .pipe(gulp.dest('dist/'))
+    .pipe(gulp.dest(destination))
     .pipe(connect.reload());
 });
 
@@ -46,7 +48,7 @@ gulp.task('build', function(done) {
 
 gulp.task('serve', function() {
   connect.server({
-    root: 'dist/',
+    root: destination,
     livereload: true,
     port: process.env.PORT
   });
