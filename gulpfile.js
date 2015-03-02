@@ -7,19 +7,18 @@ var gulp        = require('gulp'),
     less        = require('gulp-less'),
     connect     = require('gulp-connect');
 
+var sources = {
+  app: 'src/js/app.js',
+  styles: 'src/less/main.less',
+  assets: 'src/**/*.html'
+};
+
 gulp.task('clean', function(done) {
   del('dist', done);
 });
 
-gulp.task('build-styles', function() {
-  return gulp.src('src/less/main.less')
-    .pipe(less())
-    .pipe(gulp.dest('dist/css/'))
-    .pipe(connect.reload());
-});
-
-gulp.task('build-scripts', function() {
-  return gulp.src(['src/js/app.js'])
+gulp.task('build-app', function() {
+  return gulp.src(sources.app)
     .pipe(browserify({
       debug: true,
       transform: ['reactify']
@@ -28,14 +27,21 @@ gulp.task('build-scripts', function() {
     .pipe(connect.reload());
 });
 
+gulp.task('build-styles', function() {
+  return gulp.src(sources.styles)
+    .pipe(less())
+    .pipe(gulp.dest('dist/css/'))
+    .pipe(connect.reload());
+});
+
 gulp.task('build-assets', function() {
-  return gulp.src('src/**/*.html')
+  return gulp.src(sources.assets)
     .pipe(gulp.dest('dist/'))
     .pipe(connect.reload());
 });
 
 gulp.task('build', function(done) {
-  runSequence('clean', ['build-styles', 'build-scripts'], 'build-assets', done);
+  runSequence('clean', ['build-app', 'build-styles'], 'build-assets', done);
 });
 
 gulp.task('serve', function() {
@@ -46,8 +52,10 @@ gulp.task('serve', function() {
   });
 });
 
-gulp.task('watch', function () {
-  gulp.watch(['src/**'], ['build']);
+gulp.task('watch', function() {
+  gulp.watch(sources.app, ['build-script']);
+  gulp.watch(sources.styles, ['build-styles']);
+  gulp.watch(sources.assets, ['build-assets']);
 });
 
 gulp.task('default', ['build'], function() {
