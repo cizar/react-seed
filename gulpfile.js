@@ -8,7 +8,7 @@ var gulp        = require('gulp'),
     connect     = require('gulp-connect');
 
 var sources = {
-  app: 'src/js/app.js',
+  scripts: 'src/js/app.js',
   styles: 'src/less/main.less',
   assets: 'src/**/*.html'
 };
@@ -17,8 +17,8 @@ gulp.task('clean', function(done) {
   del('dist', done);
 });
 
-gulp.task('build-app', function() {
-  return gulp.src(sources.app)
+gulp.task('build-scripts', function() {
+  return gulp.src(sources.scripts)
     .pipe(browserify({
       debug: true,
       transform: ['reactify']
@@ -41,7 +41,7 @@ gulp.task('build-assets', function() {
 });
 
 gulp.task('build', function(done) {
-  runSequence('clean', ['build-app', 'build-styles'], 'build-assets', done);
+  runSequence('clean', ['build-scripts', 'build-styles'], 'build-assets', done);
 });
 
 gulp.task('serve', function() {
@@ -53,7 +53,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(sources.app, ['build-script']);
+  gulp.watch(sources.scripts, ['build-script']);
   gulp.watch(sources.styles, ['build-styles']);
   gulp.watch(sources.assets, ['build-assets']);
 });
