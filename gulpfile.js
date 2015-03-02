@@ -55,7 +55,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(sources.scripts, ['build-script']);
+  gulp.watch(sources.scripts, ['build-scripts']);
   gulp.watch(sources.styles, ['build-styles']);
   gulp.watch(sources.assets, ['build-assets']);
 });
